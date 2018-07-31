@@ -70,6 +70,10 @@ class App extends Component {
             firstName: 'Razafindrakoto'
         };
         user.name = 'Sedera';
+
+        //Decomposition
+        const { list, searchTerm } = this.state;
+
         return (
             <div className="App">
                 <header className="App-header">
@@ -88,11 +92,12 @@ class App extends Component {
                             &nbsp;
                             <input
                                 type="text"
+                                value={searchTerm}
                                 onChange={this.onSearchChange}
                             />
                         </fieldset>
                     </form>
-                    <table border="1" className="responsive-table">
+                    <table className="responsive-table">
                         <thead>
                             <tr>
                                 <th>N</th>
@@ -104,7 +109,7 @@ class App extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.state.list.filter(isSearched(this.state.searchTerm)).map( (item, key) =>
+                        {list.filter(isSearched(searchTerm)).map( (item, key) =>
                             <tr key={item.objectID}>
                                 <td data-label="N">{key + 1}</td>
                                 <td data-label="Title"><a href={item.url}>{item.title}</a></td>
