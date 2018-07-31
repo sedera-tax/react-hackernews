@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Search from './Components/Search';
+import Table from './Components/Table';
 
 const list = [
     {
@@ -85,49 +87,16 @@ class App extends Component {
                 </div>
 
                 <div id="table_container">
-                    <form>
-                        <fieldset>
-                            <legend>SEARCH</legend>
-                            <label>Title :</label>
-                            &nbsp;
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={this.onSearchChange}
-                            />
-                        </fieldset>
-                    </form>
-                    <table className="responsive-table">
-                        <thead>
-                            <tr>
-                                <th>N</th>
-                                <th>Title</th>
-                                <th>Artist</th>
-                                <th>Comment</th>
-                                <th>Points</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {list.filter(isSearched(searchTerm)).map( (item, key) =>
-                            <tr key={item.objectID}>
-                                <td data-label="N">{key + 1}</td>
-                                <td data-label="Title"><a href={item.url}>{item.title}</a></td>
-                                <td data-label="Artist">{item.author}</td>
-                                <td data-label="Comment">{item.num_comments}</td>
-                                <td data-label="Points">{item.points}</td>
-                                <td data-label="Action">
-                                    <button
-                                        type="button"
-                                        onClick={() => this.onDismiss(item.objectID)}
-                                    >
-                                        Dismiss
-                                    </button>
-                                </td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
+                    <Search
+                        value={searchTerm}
+                        onChange={this.onSearchChange}
+                    />
+                    <Table
+                        list={list}
+                        pattern={searchTerm}
+                        onDismiss={this.onDismiss}
+                        functionIsSearched={isSearched}
+                    />
                 </div>
             </div>
         );
