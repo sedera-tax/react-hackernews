@@ -90,7 +90,9 @@ class App extends Component {
                     <Search
                         value={searchTerm}
                         onChange={this.onSearchChange}
-                    />
+                    >
+                        Title :
+                    </Search>
                     <br/>
                     <Table
                         list={list}
