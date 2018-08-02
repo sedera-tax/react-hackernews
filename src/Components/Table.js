@@ -28,6 +28,7 @@ class Table extends Component {
                         <td data-label="Action">
                             <Button
                                 onClick={() => onDismiss(item.objectID)}
+                                className="btn-delete"
                             >
                                 Dismiss
                             </Button>
