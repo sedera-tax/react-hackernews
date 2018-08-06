@@ -30,3 +30,9 @@ button {
   color: #000;
   border-radius: 15px;
 }
+.btn-loadmore {
+  background-color: #0f38d9;
+  border-color: #0064d4;
+  color: #FFF;
+  border-radius: 15px;
+}
