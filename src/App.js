@@ -3,6 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import Search from './Components/Search';
 import Table from './Components/Table';
+import SearchApi from "./Components/SearchApi";
+import TableApi from "./Components/TableApi";
+
+const DEFAULT_QUERY = '';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+// const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}`;
 
 const list = [
     {
@@ -44,12 +52,16 @@ class App extends Component {
 
         this.state = {
             list: list,
-            searchTerm: '',
+            result: null,
+            searchTerm: DEFAULT_QUERY,
         };
 
         this.onDismiss = this.onDismiss.bind(this);
-
         this.onSearchChange = this.onSearchChange.bind(this);
+
+        this.onDismissObj = this.onDismissObj.bind(this);
+        this.setSearchTopStories = this.setSearchTopStories.bind(this);
+        this.onSearchSubmit = this.onSearchSubmit.bind(this) ;
     }
 
     onDismiss(id) {
@@ -66,6 +78,36 @@ class App extends Component {
         });
     }
 
+    onDismissObj(id) {
+        const isNotId = item => item.objectID !== id;
+        const updatedHits = this.state.result.hits.filter(isNotId);
+        this.setState({
+            result: Object.assign({}, this.state.result, { hits: updatedHits })
+        });
+    }
+
+    setSearchTopStories(result) {
+        this.setState({ result });
+    }
+
+    onSearchSubmit(event) {
+        const { searchTerm } = this.state;
+        this.fetchSearchTopStories(searchTerm);
+        event.preventDefault();
+    }
+
+    fetchSearchTopStories(searchTerm) {
+        fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+            .then(response => response.json())
+            .then(result => this.setSearchTopStories(result))
+            .catch(error => error);
+    }
+
+    componentDidMount() {
+        const { searchTerm } = this.state;
+        this.fetchSearchTopStories(searchTerm);
+    }
+
     render() {
         const user = {
             name: 'Yannick',
@@ -74,7 +116,7 @@ class App extends Component {
         user.name = 'Sedera';
 
         //Decomposition
-        const { list, searchTerm } = this.state;
+        const { list, result, searchTerm } = this.state;
 
         return (
             <div className="App">
@@ -100,6 +142,28 @@ class App extends Component {
                         onDismiss={this.onDismiss}
                         functionIsSearched={isSearched}
                     />
+                </div>
+
+                <div className="page">
+                    <h2>WITH API</h2>
+                    <div id="table_container">
+                        <SearchApi
+                            value={searchTerm}
+                            onChange={this.onSearchChange}
+                            onSubmit={this.onSearchSubmit}
+                        >
+                            Search
+                        </SearchApi>
+                        <br/>
+                        {
+                            result &&
+                            <TableApi
+                                list={result.hits}
+                                pattern={searchTerm}
+                                onDismissObj={this.onDismissObj}
+                            />
+                        }
+                    </div>
                 </div>
             </div>
         );

@@ -24,3 +24,9 @@ button {
   border-color: #d43f3a;
   color: #FFF;
 }
+.btn-search {
+  background-color: #25e391;
+  border-color: #3ed435;
+  color: #000;
+  border-radius: 15px;
+}
